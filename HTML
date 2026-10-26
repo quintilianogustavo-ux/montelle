@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Montelle Store</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="logo" onclick="go('store')" role="button" tabindex="0">MONTELLE<small>STORE</small></div>
+  <input id="q" type="search" placeholder="Pesquisar produtos…" aria-label="Pesquisar produtos" oninput="S.q=this.value;go('store')">
+  <nav class="row" aria-label="Menu principal" style="flex:0">
+    <button onclick="go('store')">Loja</button>
+    <button onclick="openCart()">🛒 Carrinho (<span id="cc">0</span>)</button>
+    <button onclick="go('admin')">Admin</button>
+  </nav>
+</header>
+<main id="app"></main>
+<footer>Montelle Store · extensão digital da loja física</footer>
+<div id="ov" role="dialog" aria-modal="true"><div class="md" id="md"></div></div>
+<div id="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
+ 
