@@ -1,26 +1,158 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Montelle Store</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montelle Store - Sistema Web</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="logo" onclick="go('store')" role="button" tabindex="0">MONTELLE<small>STORE</small></div>
-  <input id="q" type="search" placeholder="Pesquisar produtos…" aria-label="Pesquisar produtos" oninput="S.q=this.value;go('store')">
-  <nav class="row" aria-label="Menu principal" style="flex:0">
-    <button onclick="go('store')">Loja</button>
-    <button onclick="openCart()">🛒 Carrinho (<span id="cc">0</span>)</button>
-    <button onclick="go('admin')">Admin</button>
-  </nav>
-</header>
-<main id="app"></main>
-<footer>Montelle Store · extensão digital da loja física</footer>
-<div id="ov" role="dialog" aria-modal="true"><div class="md" id="md"></div></div>
-<div id="toast" role="status"></div>
-<script src="script.js"></script>
+
+    <!-- RII02/RII03 - Menu de Navegação Global -->
+    <header class="main-header">
+        <div class="header-container">
+            <h1 class="logo">MONTELLE STORE</h1>
+            <nav class="nav-menu">
+                <button class="nav-btn active" id="btn-loja" onclick="alternarAba('loja')">🛒 Ver Loja</button>
+                <button class="nav-btn" id="btn-admin" onclick="alternarAba('admin')">⚙️ Painel Admin</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Feedback Global de Operações (RII10) -->
+    <div id="toast-notificacao" class="toast hidden"></div>
+
+    <main class="main-content max-container">
+
+        <!-- ================= ÁREA DO CLIENTE ================= -->
+        <section id="aba-loja" class="grid-layout">
+            <!-- RF01/RF03/RF04 - Catálogo e Filtros -->
+            <div class="catalogo-container">
+                <div class="filtros-bar">
+                    <input type="text" id="busca-produto" placeholder="🔍 Pesquisar produto..." oninput="filtrarProdutos()">
+                    <select id="filtro-categoria" onchange="filtrarProdutos()">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Blusas">Blusas</option>
+                        <option value="Calças">Calças</option>
+                        <option value="Vestidos">Vestidos</option>
+                        <option value="Acessórios">Acessórios</option>
+                    </select>
+                </div>
+                <div id="lista-produtos" class="produtos-grid">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </div>
+
+            <!-- RF05/RF06 - Carrinho de Compras Lateral -->
+            <aside class="sidebar-carrinho">
+                <h2>Resumo do Pedido</h2>
+                <div id="itens-carrinho" class="carrinho-lista">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+                <div class="carrinho-total">
+                    <span>Total:</span>
+                    <strong id="total-valor">R$ 0,00</strong>
+                </div>
+                <!-- RF07 - Finalização -->
+                <button class="btn-primary w-100" id="btn-finalizar" onclick="finalizarCompra()" disabled>
+                    Confirmar e Finalizar Compra
+                </button>
+            </aside>
+        </section>
+
+        <!-- ================= ÁREA ADMINISTRATIVA ================= -->
+        <section id="aba-admin" class="hidden">
+            <div class="admin-grid">
+                
+                <!-- RF10/RF13 - Formulário de Cadastro/Edição -->
+                <div class="admin-card">
+                    <h2 id="admin-form-titulo">Cadastrar Novo Produto</h2>
+                    <form id="form-produto" onsubmit="salvarProduto(event)">
+                        <input type="hidden" id="prod-id">
+                        
+                        <div class="form-group">
+                            <label for="prod-nome">Nome do Produto *</label>
+                            <input type="text" id="prod-nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="prod-descricao">Descrição</label>
+                            <textarea id="prod-descricao" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-categoria">Categoria *</label>
+                                <select id="prod-categoria" required>
+                                    <option value="Blusas">Blusas</option>
+                                    <option value="Calças">Calças</option>
+                                    <option value="Vestidos">Vestidos</option>
+                                    <option value="Acessórios">Acessórios</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-preco">Preço (R$) *</label>
+                                <input type="number" id="prod-preco" step="0.01" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-tamanho">Tamanho *</label>
+                                <select id="prod-tamanho" required>
+                                    <option value="P">P</option>
+                                    <option value="M">M</option>
+                                    <option value="G">G</option>
+                                    <option value="Único">Único</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-estoque">Qtd em Estoque *</label>
+                                <input type="number" id="prod-estoque" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-imagem">URL da Imagem</label>
+                            <input type="url" id="prod-imagem" placeholder="https://exemplo.com">
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-success">Salvar Produto</button>
+                            <button type="button" class="btn-secondary" onclick="limparFormularioAdmin()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RF14/RF16 - Controle de Estoque Baixo e Listagem Geral -->
+                <div class="admin-card">
+                    <h2>Monitoramento de Estoque</h2>
+                    <p class="subtext">Produtos com estoque igual ou inferior a 3 unidades aparecem destacados em vermelho (RF16).</p>
+                    
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Tam.</th>
+                                    <th>Preço</th>
+                                    <th>Estoque</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-admin-produtos">
+                                <!-- Gerado dinamicamente via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
 </body>
 </html>
- 
