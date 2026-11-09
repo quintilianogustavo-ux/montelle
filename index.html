@@ -8,28 +8,28 @@
 </head>
 <body>
 
-    <!-- RII02/RII03 - Menu de Navegação Global -->
+    <!--- Menu de Navegação Global -->
     <header class="main-header">
         <div class="header-container">
             <h1 class="logo">MONTELLE STORE</h1>
             <nav class="nav-menu">
-                <button class="nav-btn active" id="btn-loja" onclick="alternarAba('loja')">🛒 Ver Loja</button>
-                <button class="nav-btn" id="btn-admin" onclick="alternarAba('admin')">⚙️ Painel Admin</button>
+                <button class="nav-btn active" id="btn-loja" onclick="alternarAba('loja')"> Ver Loja</button>
+                <button class="nav-btn" id="btn-admin" onclick="alternarAba('admin')"> Painel Admin</button>
             </nav>
         </div>
     </header>
 
-    <!-- Feedback Global de Operações (RII10) -->
+    <!-- Feedback Global de Operações -->
     <div id="toast-notificacao" class="toast hidden"></div>
 
     <main class="main-content max-container">
 
         <!-- ================= ÁREA DO CLIENTE ================= -->
         <section id="aba-loja" class="grid-layout">
-            <!-- RF01/RF03/RF04 - Catálogo e Filtros -->
+            <!--- Catálogo e Filtros -->
             <div class="catalogo-container">
                 <div class="filtros-bar">
-                    <input type="text" id="busca-produto" placeholder="🔍 Pesquisar produto..." oninput="filtrarProdutos()">
+                    <input type="text" id="busca-produto" placeholder=" Pesquisar produto..." oninput="filtrarProdutos()">
                     <select id="filtro-categoria" onchange="filtrarProdutos()">
                         <option value="">Todas as Categorias</option>
                         <option value="Blusas">Blusas</option>
@@ -39,21 +39,21 @@
                     </select>
                 </div>
                 <div id="lista-produtos" class="produtos-grid">
-                    <!-- Gerado dinamicamente via JS -->
+                    <!--dinamicamente via JS -->
                 </div>
             </div>
 
-            <!-- RF05/RF06 - Carrinho de Compras Lateral -->
+            <!--- Carrinho de Compras Lateral -->
             <aside class="sidebar-carrinho">
                 <h2>Resumo do Pedido</h2>
                 <div id="itens-carrinho" class="carrinho-lista">
-                    <!-- Gerado dinamicamente via JS -->
+                    <!-- dinamicamente via JS -->
                 </div>
                 <div class="carrinho-total">
                     <span>Total:</span>
                     <strong id="total-valor">R$ 0,00</strong>
                 </div>
-                <!-- RF07 - Finalização -->
+                <!--- Finalização -->
                 <button class="btn-primary w-100" id="btn-finalizar" onclick="finalizarCompra()" disabled>
                     Confirmar e Finalizar Compra
                 </button>
@@ -64,7 +64,7 @@
         <section id="aba-admin" class="hidden">
             <div class="admin-grid">
                 
-                <!-- RF10/RF13 - Formulário de Cadastro/Edição -->
+                <!--- Formulário de Cadastro/Edição -->
                 <div class="admin-card">
                     <h2 id="admin-form-titulo">Cadastrar Novo Produto</h2>
                     <form id="form-produto" onsubmit="salvarProduto(event)">
@@ -124,7 +124,7 @@
                     </form>
                 </div>
 
-                <!-- RF14/RF16 - Controle de Estoque Baixo e Listagem Geral -->
+                <!--- Controle de Estoque Baixo e Listagem Geral -->
                 <div class="admin-card">
                     <h2>Monitoramento de Estoque</h2>
                     <p class="subtext">Produtos com estoque igual ou inferior a 3 unidades aparecem destacados em vermelho (RF16).</p>
@@ -142,7 +142,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabela-admin-produtos">
-                                <!-- Gerado dinamicamente via JS -->
+                                <!--JS -->
                             </tbody>
                         </table>
                     </div>
