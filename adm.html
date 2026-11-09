@@ -1,1 +1,97 @@
+<!-- ================= ÁREA ADMINISTRATIVA ================= -->
+        <section id="aba-admin" class="hidden">
+            <div class="admin-grid">
+                
+                <!--- Formulário de Cadastro/Edição -->
+                <div class="admin-card">
+                    <h2 id="admin-form-titulo">Cadastrar Novo Produto</h2>
+                    <form id="form-produto" onsubmit="salvarProduto(event)">
+                        <input type="hidden" id="prod-id">
+                        
+                        <div class="form-group">
+                            <label for="prod-nome">Nome do Produto *</label>
+                            <input type="text" id="prod-nome" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="prod-descricao">Descrição</label>
+                            <textarea id="prod-descricao" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-categoria">Categoria *</label>
+                                <select id="prod-categoria" required>
+                                    <option value="Blusas">Blusas</option>
+                                    <option value="Calças">Calças</option>
+                                    <option value="Vestidos">Vestidos</option>
+                                    <option value="Acessórios">Acessórios</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-preco">Preço (R$) *</label>
+                                <input type="number" id="prod-preco" step="0.01" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="prod-tamanho">Tamanho *</label>
+                                <select id="prod-tamanho" required>
+                                    <option value="P">P</option>
+                                    <option value="M">M</option>
+                                    <option value="G">G</option>
+                                    <option value="Único">Único</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-estoque">Qtd em Estoque *</label>
+                                <input type="number" id="prod-estoque" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prod-imagem">URL da Imagem</label>
+                            <input type="url" id="prod-imagem" placeholder="https://exemplo.com">
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="btn-success">Salvar Produto</button>
+                            <button type="button" class="btn-secondary" onclick="limparFormularioAdmin()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--- Controle de Estoque Baixo e Listagem Geral -->
+                <div class="admin-card">
+                    <h2>Monitoramento de Estoque</h2>
+                    <p class="subtext">Produtos com estoque igual ou inferior a 3 unidades aparecem destacados em vermelho (RF16).</p>
+                    
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Tam.</th>
+                                    <th>Preço</th>
+                                    <th>Estoque</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-admin-produtos">
+                                <!--JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
 
