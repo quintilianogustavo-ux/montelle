@@ -1,105 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montelle Store - area adm</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Montelle Store - Painel Administrativo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-        <section id="aba-admin" class="hidden">
-            <div class="admin-grid">
-                
-                <!--- Formulário de Cadastro/Edição -->
-                <div class="admin-card">
-                    <h2 id="admin-form-titulo">Cadastrar Novo Produto</h2>
-                    <form id="form-produto" onsubmit="salvarProduto(event)">
-                        <input type="hidden" id="prod-id">
-                        
-                        <div class="form-group">
-                            <label for="prod-nome">Nome do Produto *</label>
-                            <input type="text" id="prod-nome" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="prod-descricao">Descrição</label>
-                            <textarea id="prod-descricao" rows="2"></textarea>
-                        </div>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="prod-categoria">Categoria *</label>
-                                <select id="prod-categoria" required>
-                                    <option value="Blusas">Blusas</option>
-                                    <option value="Calças">Calças</option>
-                                    <option value="Vestidos">Vestidos</option>
-                                    <option value="Acessórios">Acessórios</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="prod-preco">Preço (R$) *</label>
-                                <input type="number" id="prod-preco" step="0.01" min="0" required>
-                            </div>
-                        </div>
+  <header class="topo">
+    <div class="topo-in">
+      <a class="logo" href="index.html" aria-label="Montelle Store">MONTELLE<small>ADMIN</small></a>
+      <nav class="menu" aria-label="Menu principal" style="margin-left:auto">
+        <a href="index.html">Loja</a>
+        <a href="admin.html" aria-current="page">Área administrativa</a>
+        <button class="link" id="btn-sair" type="button" hidden>Sair</button>
+      </nav>
+    </div>
+  </header>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="prod-tamanho">Tamanho *</label>
-                                <select id="prod-tamanho" required>
-                                    <option value="P">P</option>
-                                    <option value="M">M</option>
-                                    <option value="G">G</option>
-                                    <option value="Único">Único</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="prod-estoque">Qtd em Estoque *</label>
-                                <input type="number" id="prod-estoque" min="0" required>
-                            </div>
-                        </div>
+  <!-- Tela de login (RF09, RNF04, RN10) -->
+  <section id="tela-login" class="login-caixa" aria-labelledby="t-login">
+    <h1 id="t-login">Acesso restrito</h1>
+    <p class="dica">Demonstração: usuário <strong>admin</strong> · senha <strong>montelle123</strong></p>
+    <form id="form-login" novalidate>
+      <div class="campo"><label for="lg-user">Usuário <span class="obrig">*</span></label><input id="lg-user" autocomplete="username"></div>
+      <div class="campo"><label for="lg-pass">Senha <span class="obrig">*</span></label><input id="lg-pass" type="password" autocomplete="current-password"></div>
+      <span class="erro" id="lg-erro" role="alert"></span>
+      <button class="btn" type="submit" style="width:100%">Entrar</button>
+    </form>
+  </section>
 
-                        <div class="form-group">
-                            <label for="prod-imagem">URL da Imagem</label>
-                            <input type="url" id="prod-imagem" placeholder="https://exemplo.com">
-                        </div>
+  <!-- Painel (RII12) -->
+  <main id="painel" class="container" hidden>
+    <div class="abas" role="tablist" aria-label="Seções do painel" id="abas">
+      <button class="aba" role="tab" data-aba="produtos">Produtos</button>
+      <button class="aba" role="tab" data-aba="categorias">Categorias</button>
+      <button class="aba" role="tab" data-aba="estoque">Estoque</button>
+      <button class="aba" role="tab" data-aba="pedidos">Pedidos</button>
+      <button class="aba" role="tab" data-aba="vendas">Vendas</button>
+      <button class="aba" role="tab" data-aba="auditoria">Auditoria</button>
+    </div>
+    <div id="conteudo" role="tabpanel" tabindex="-1"></div>
+  </main>
 
-                        <div class="form-buttons">
-                            <button type="submit" class="btn-success">Salvar Produto</button>
-                            <button type="button" class="btn-secondary" onclick="limparFormularioAdmin()">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
+  <!-- Janela reutilizada para formulário de produto e detalhe de pedido -->
+  <dialog id="dlg" class="largo" aria-labelledby="dlg-titulo">
+    <div class="dlg-topo"><h2 id="dlg-titulo">—</h2><button class="fechar" data-fechar aria-label="Fechar">×</button></div>
+    <div class="dlg-corpo" id="dlg-corpo"></div>
+  </dialog>
 
-                <!--- Controle de Estoque Baixo e Listagem Geral -->
-                <div class="admin-card">
-                    <h2>Monitoramento de Estoque</h2>
-                    <p class="subtext">Produtos com estoque igual ou inferior a 3 unidades aparecem destacados em vermelho (RF16).</p>
-                    
-                    <div class="table-responsive">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Produto</th>
-                                    <th>Categoria</th>
-                                    <th>Tam.</th>
-                                    <th>Preço</th>
-                                    <th>Estoque</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabela-admin-produtos">
-                                <!--JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
- </body>
-
-    <script src="app.js"></script>
+  <script src="comum.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>
-
