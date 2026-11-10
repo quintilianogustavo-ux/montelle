@@ -1,63 +1,87 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montelle Store - Sistema Web</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Montelle Store - Roupas e Acessórios</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="pular" href="#catalogo">Pular para o catálogo</a>
 
-    <!--- Menu de Navegação Global -->
-    <header class="main-header">
-        <div class="header-container">
-            <h1 class="logo">MONTELLE STORE</h1>
-            <nav class="nav-menu">
-                <button class="nav-btn active" id="btn-loja" onclick="alternarAba('loja')"> Ver Loja</button>
-                <a href="adm.html">adm</a>
-            </nav>
-        </div>
-    </header>
+  <!-- Cabeçalho: identificação da loja, pesquisa, menu e carrinho (RII02, RII03, RII08) -->
+  <header class="topo">
+    <div class="topo-in">
+      <a class="logo" href="index.html" aria-label="Montelle Store, página inicial">MONTELLE<small>STORE</small></a>
+      <form class="busca" role="search" id="form-busca">
+        <label class="sr-only" for="busca">Pesquisar produtos</label>
+        <input type="search" id="busca" placeholder="Pesquisar produtos..." autocomplete="off">
+        <button type="submit">Buscar</button>
+      </form>
+      <nav class="menu" aria-label="Menu principal">
+        <a href="index.html" aria-current="page">Loja</a>
+        <a href="admin.html">Área administrativa</a>
+        <button class="link" id="btn-carrinho" type="button" aria-label="Abrir carrinho">
+          🛒 Carrinho <span class="badge-carrinho" id="badge" aria-live="polite">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-    <!-- Feedback Global de Operações -->
-    <div id="toast-notificacao" class="toast hidden"></div>
+  <main class="container" id="catalogo">
+    <section class="hero" aria-labelledby="titulo-hero">
+      <h1 id="titulo-hero">Moda com praticidade, de onde você estiver</h1>
+      <p>Escolha suas peças, confira tamanhos e disponibilidade e finalize seu pedido em poucos cliques.</p>
+    </section>
 
-    <main class="main-content max-container">
+    <div class="categorias" id="categorias" role="group" aria-label="Categorias"></div>
+    <p class="dica" id="resultado-info" aria-live="polite"></p>
+    <section class="grade" id="grade" aria-label="Produtos"></section>
+  </main>
 
-        <!-- ================= ÁREA DO CLIENTE ================= -->
-        <section id="aba-loja" class="grid-layout">
-            <!--- Catálogo e Filtros -->
-            <div class="catalogo-container">
-                <div class="filtros-bar">
-                    <input type="text" id="busca-produto" placeholder=" Pesquisar produto..." oninput="filtrarProdutos()">
-                    <select id="filtro-categoria" onchange="filtrarProdutos()">
-                        <option value="">Todas as Categorias</option>
-                        <option value="Blusas">Blusas</option>
-                        <option value="Calças">Calças</option>
-                        <option value="Vestidos">Vestidos</option>
-                        <option value="Acessórios">Acessórios</option>
-                    </select>
-                </div>
-                <div id="lista-produtos" class="produtos-grid">
-                    <!--dinamicamente via JS -->
-                </div>
-            </div>
+  <footer class="rodape">© Montelle Store — projeto acadêmico. Os dados ficam salvos neste navegador.</footer>
 
-            <!--- Carrinho de Compras Lateral -->
-            <aside class="sidebar-carrinho">
-                <h2>Resumo do Pedido</h2>
-                <div id="itens-carrinho" class="carrinho-lista">
-                    <!-- dinamicamente via JS -->
-                </div>
-                <div class="carrinho-total">
-                    <span>Total:</span>
-                    <strong id="total-valor">R$ 0,00</strong>
-                </div>
-                <!--- Finalização -->
-                <button class="btn-primary w-100" id="btn-finalizar" onclick="finalizarCompra()" disabled>
-                    Confirmar e Finalizar Compra
-                </button>
-            </aside>
-        </section>
+  <!-- Janela: detalhes do produto (RII05, RII06) -->
+  <dialog id="dlg-produto" aria-labelledby="dp-titulo">
+    <div class="dlg-topo"><h2 id="dp-titulo">Produto</h2><button class="fechar" data-fechar aria-label="Fechar">×</button></div>
+    <div class="dlg-corpo" id="dp-corpo"></div>
+  </dialog>
 
-        
+  <!-- Gaveta: carrinho (RF05, RF06, RII07) -->
+  <dialog id="dlg-carrinho" class="gaveta" aria-labelledby="dc-titulo">
+    <div class="dlg-topo"><h2 id="dc-titulo">Seu carrinho</h2><button class="fechar" data-fechar aria-label="Fechar carrinho">×</button></div>
+    <div class="dlg-corpo" id="dc-corpo"></div>
+  </dialog>
+
+  <!-- Janela: finalizar compra (RF07, RII09) -->
+  <dialog id="dlg-checkout" aria-labelledby="dk-titulo">
+    <div class="dlg-topo"><h2 id="dk-titulo">Finalizar compra</h2><button class="fechar" data-fechar aria-label="Fechar">×</button></div>
+    <div class="dlg-corpo">
+      <div class="resumo-ped" id="dk-resumo"></div>
+      <form id="form-checkout" novalidate>
+        <p class="dica">Campos com <span class="obrig" style="color:#b3261e">*</span> são obrigatórios.</p>
+        <div class="campo"><label for="ck-nome">Nome completo <span class="obrig">*</span></label>
+          <input id="ck-nome" autocomplete="name" aria-describedby="err-nome"><span class="erro" id="err-nome"></span></div>
+        <div class="campo"><label for="ck-email">E-mail <span class="obrig">*</span></label>
+          <input id="ck-email" type="email" autocomplete="email" aria-describedby="err-email"><span class="erro" id="err-email"></span></div>
+        <div class="campo"><label for="ck-tel">Telefone <span class="obrig">*</span></label>
+          <input id="ck-tel" type="tel" autocomplete="tel" placeholder="(41) 99999-9999" aria-describedby="err-tel"><span class="erro" id="err-tel"></span></div>
+        <div class="campo"><label for="ck-end">Endereço de entrega <span class="obrig">*</span></label>
+          <input id="ck-end" autocomplete="street-address" placeholder="Rua, número, bairro, cidade" aria-describedby="err-end"><span class="erro" id="err-end"></span></div>
+        <div class="campo"><label for="ck-pag">Forma de pagamento <span class="obrig">*</span></label>
+          <select id="ck-pag" aria-describedby="err-pag"></select><span class="erro" id="err-pag"></span></div>
+        <p class="dica">Seus dados são usados apenas para processar este pedido (LGPD).</p>
+        <button class="btn" type="submit" id="btn-confirmar" style="width:100%">Confirmar pedido</button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Janela: confirmação (RII19) -->
+  <dialog id="dlg-ok" aria-labelledby="dok-titulo">
+    <div class="dlg-corpo sucesso" id="dok-corpo"></div>
+  </dialog>
+
+  <script src="comum.js"></script>
+  <script src="loja.js"></script>
+</body>
+</html>
